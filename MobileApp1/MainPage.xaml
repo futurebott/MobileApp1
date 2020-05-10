@@ -10,19 +10,10 @@
             ItemsSource="{Binding stores}"
           
             CachingStrategy="RecycleElement">
-        <d:ListView.ItemsSource>
-            <x:Array Type="{x:Type x:String}">
-                <x:String>Item 1</x:String>
-                <x:String>Item 2</x:String>
-                <x:String>Item 3</x:String>
-                <x:String>Item 4</x:String>
-                <x:String>Item 5</x:String>
-            </x:Array>
-        </d:ListView.ItemsSource>
-        <!--Built in Cells-->
+       <!--Built in Cells-->
         <ListView.ItemTemplate>
             <DataTemplate>
-                <TextCell Text="{Binding Name}" d:Text="{Binding .Id}" />
+                <TextCell Text="{Binding Name}" d:Text="{Binding Id}" />
             </DataTemplate>
         </ListView.ItemTemplate>
 

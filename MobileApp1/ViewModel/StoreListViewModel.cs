@@ -27,14 +27,22 @@ namespace MobileApp1.ViewModel
         public StoreListViewModel()
         {
             _storeService = new StoreService();
-            PopulateStores();
+            var user = new User();
+           
+            Task.Run(async() =>
+            {
+                var userLocation= await user.CurrentLocation();
+                PopulateStores("latitude="+userLocation.Latitude+ "&longtitude="+userLocation.Longitude+"live=true");
+
+            });
+            var currentLocation = user.CurrentLocation();
+            PopulateStores("lat=Latitutude");
         }
-        void PopulateStores()
+        void PopulateStores(string parameters = "")
         {
             List<Store> list;
             Task.Run(async () =>
             {
-                string parameters = "";
                list = await _storeService.GetList(parameters);
                stores = new ObservableCollection<Store>(list);
             });
