@@ -7,34 +7,54 @@ using System.Threading.Tasks;
 
 namespace MobileApp1.APIService
 {
-   public class BaseService<T>
+    public class BaseService<T>
     {
         HttpClient _client;
-        const string _ListMethod = "GetList";
-        const string _AddUpdateMethod = "AddUpdate";
-        const string APIBaseUrl = "https://localhost:44338/api/";//"https://futuristicapi20200429024818.azurewebsites.net/api/";
-        public BaseService(string apiPath)
+        string _ListMethod = "List";
+        const string _AddUpdateMethod = "Update";
+        const string APIBaseUrl = "https://futuristicapi20200429024818.azurewebsites.net/api/";
+        public BaseService(string apiName)
         {
             _client = new HttpClient();
+            string className = string.Empty;
+            if (!string.IsNullOrEmpty(apiName))
+            {
+                className = apiName;
+            }
+            else
+            {
+                className = typeof(T).Name;
+            }
+            _ListMethod = className + "/" + className + _ListMethod;
         }
         public BaseService()
         {
-            
+
         }
         public async Task<List<T>> GetList(string filter = "")
         {
-            List<T> list = new List<T>();
-            var uri = new Uri(string.Format(APIBaseUrl+_ListMethod));
-            if (string.IsNullOrWhiteSpace(filter))
-                filter +="?";
 
-            var response = await _client.GetAsync(uri + _ListMethod + filter);
-            if (response.IsSuccessStatusCode)
+            List<T> list = new List<T>();
+            try
             {
-                var content = await response.Content.ReadAsStringAsync();
-                list = JsonConvert.DeserializeObject<List<T>>(content);
+                var uri = APIBaseUrl + _ListMethod;
+                if (!string.IsNullOrWhiteSpace(filter))
+                {
+                    uri += "?" + filter;
+                }
+
+                var response = await _client.GetAsync(uri);
+                if (response.IsSuccessStatusCode)
+                {
+                    var content = await response.Content.ReadAsStringAsync();
+                    list = JsonConvert.DeserializeObject<List<T>>(content);
+                }
+                return list;
             }
-            return list;
+            catch (Exception ex)
+            {
+                return list;
+            }
         }
         public async Task<List<T>> AddUpdateEntity()
         {

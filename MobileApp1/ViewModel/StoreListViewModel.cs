@@ -32,19 +32,25 @@ namespace MobileApp1.ViewModel
             Task.Run(async() =>
             {
                 var userLocation= await user.CurrentLocation();
-                PopulateStores("latitude="+userLocation.Latitude+ "&longtitude="+userLocation.Longitude+"live=true");
+                PopulateStores("latitude="+userLocation.Latitude+ "&longtitude="+userLocation.Longitude+"&live=true");
 
             });
             var currentLocation = user.CurrentLocation();
-            PopulateStores("lat=Latitutude");
         }
         void PopulateStores(string parameters = "")
         {
-            List<Store> list;
             Task.Run(async () =>
             {
-               list = await _storeService.GetList(parameters);
-               stores = new ObservableCollection<Store>(list);
+               var alist = await _storeService.GetList(parameters);
+                stores = new ObservableCollection<Store>();
+                try
+                {
+                    stores = new ObservableCollection<Store>(alist);
+                }
+                catch (Exception ex)
+                {
+                    ex = ex;
+                }
             });
     }
        
