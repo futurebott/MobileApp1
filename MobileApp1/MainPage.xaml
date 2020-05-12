@@ -30,14 +30,15 @@
                                FontAttributes="Bold" />
                         <Label Grid.Row="1"
                                Grid.Column="1" 
-                               Text="{Binding Location}"
+                               Text="{Binding Distance}"
                                FontAttributes="Italic" 
                                VerticalOptions="End" />
                     </Grid>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>
+        <Label x:Name="a1222" Text="hsello"></Label>
     </StackLayout>
-
+   
 </ContentPage>
     
