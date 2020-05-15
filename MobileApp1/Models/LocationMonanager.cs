@@ -21,9 +21,11 @@ namespace MobileApp1.Models
             {
 #if DEBUG
                 location = new Location(43.842330, -79.074900);
-#endif
-                
+
+#else
+
                 location = await Geolocation.GetLastKnownLocationAsync();
+#endif
 
                 if (location != null)
                 {

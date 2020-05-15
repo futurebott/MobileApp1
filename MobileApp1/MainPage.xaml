@@ -6,38 +6,40 @@
              mc:Ignorable="d"
              x:Class="MobileApp1.MainPage">
     <StackLayout Margin="20">
-        <CollectionView x:Name="collectionView"
+        <RefreshView IsRefreshing="{Binding IsBusy, Mode=TwoWay}" Command="{Binding LoadItemsCommand}">
+            <CollectionView x:Name="collectionView"
                         ItemsSource="{Binding stores}"
-                        SelectionMode="Multiple">
-            <CollectionView.ItemTemplate>
-                <DataTemplate>
-                    <Grid Padding="10">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="Auto" />
-                        </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="Auto" />
-                        </Grid.ColumnDefinitions>
-                        <Image Grid.RowSpan="2" 
+                        SelectionMode="Single">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Padding="10">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <Image Grid.RowSpan="2" 
                                Source="{Binding ImageUrl}" 
                                Aspect="AspectFill"
                                HeightRequest="60" 
                                WidthRequest="60" />
-                        <Label Grid.Column="1" 
+                            <Label Grid.Column="1" 
                                Text="{Binding Name}" 
                                FontAttributes="Bold" />
-                        <Label Grid.Row="1"
+                            <Label Grid.Row="1"
                                Grid.Column="1" 
                                Text="{Binding Distance}"
                                FontAttributes="Italic" 
                                VerticalOptions="End" />
-                    </Grid>
-                </DataTemplate>
-            </CollectionView.ItemTemplate>
-        </CollectionView>
-        <Label x:Name="a1222" Text="hsello"></Label>
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </RefreshView>
+        <Label x:Name="a1222" Text="hselvvccvclo"></Label>
     </StackLayout>
    
 </ContentPage>

@@ -1,4 +1,5 @@
-﻿using MobileApp1.APIService;
+﻿using Futuristic.ViewModel;
+using MobileApp1.APIService;
 using MobileApp1.Models;
 using System;
 using System.Collections.Generic;
@@ -7,52 +8,47 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using Xamarin.Forms;
 
 namespace MobileApp1.ViewModel
 {
-   public class StoreListViewModel : INotifyPropertyChanged
+   public class StoreListViewModel : BaseViewModel
     {
         public ObservableCollection<Store> stores { get; set; }
+        public Command LoadItemsCommand { get; set; }
         private  StoreService _storeService;
-
-        #region INotifyPropertyChanged
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-        #endregion
 
         public StoreListViewModel()
         {
-            _storeService = new StoreService();
-            var user = new User();
-           
-            Task.Run(async() =>
-            {
-                var userLocation= await user.CurrentLocation();
-                PopulateStores("latitude="+userLocation.Latitude+ "&longtitude="+userLocation.Longitude+"&live=true");
-
-            });
-            var currentLocation = user.CurrentLocation();
+            stores = new ObservableCollection<Store>();
+            LoadItemsCommand = new Command(async () => await ExecuteLoadItemsCommand());
         }
-        void PopulateStores(string parameters = "")
+   
+        async Task ExecuteLoadItemsCommand()
         {
-            Task.Run(async () =>
+            IsBusy = true;
+
+            try
             {
-               var alist = await _storeService.GetList(parameters);
-                stores = new ObservableCollection<Store>();
-                try
+                var user = new User();
+                _storeService = new StoreService();
+                var userLocation = await user.CurrentLocation();
+                var parameters = "latitude=" + userLocation.Latitude + "&longtitude=" + userLocation.Longitude + "&live=true";
+                var asnycList = await _storeService.GetList(parameters);
+                foreach (var item in asnycList)
                 {
-                    stores = new ObservableCollection<Store>(alist);
+                    stores.Add(item);
                 }
-                catch (Exception ex)
-                {
-                    ex = ex;
-                }
-            });
-    }
-       
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+        }
+
     }
 }

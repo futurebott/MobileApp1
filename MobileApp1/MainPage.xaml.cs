@@ -17,18 +17,19 @@ namespace MobileApp1
     [DesignTimeVisible(false)]
     public partial class MainPage : ContentPage
     {
+        StoreListViewModel viewModel;
         public MainPage()
         {
             InitializeComponent();
-            BindingContext = new StoreListViewModel();
-           
-            //TODO -Now-
-            //TOD - global Start backgroud tasks on separate thread
-            //3 - Load check if we all the images
-            //2- Any available updates
-            //1 - Initialize user session
+            BindingContext  = viewModel=  new StoreListViewModel();
         }
-       
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+
+            if (viewModel.stores.Count == 0)
+                viewModel.IsBusy = true;
+        }
 
         #region testing code
         //        public async void btnGetLocationAsync(object sender, EventArgs e)
